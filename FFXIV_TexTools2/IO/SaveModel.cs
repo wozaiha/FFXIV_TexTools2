@@ -1980,11 +1980,9 @@ namespace FFXIV_TexTools2.IO
                             xmlWriter.WriteAttributeString("id", "geom-" + modelName + "_" + i + partString + "-skin1-joints-array");
                             xmlWriter.WriteAttributeString("count", meshDataList[i].BoneStrings.Count.ToString());
 
-                            var modelBoneStrings = meshDataList[i].BoneStrings;
-
-                            foreach (var b in modelBoneStrings)
+                            foreach (var b in skelDict)
                             {
-                                xmlWriter.WriteString(b + " ");
+                                xmlWriter.WriteString(b.Key + " ");
                             }
                             xmlWriter.WriteEndElement();
                             //</Name_array>
@@ -1994,7 +1992,7 @@ namespace FFXIV_TexTools2.IO
                             //<accessor>
                             xmlWriter.WriteStartElement("accessor");
                             xmlWriter.WriteAttributeString("source", "#geom-" + modelName + "_" + i + partString + "-skin1-joints-array");
-                            xmlWriter.WriteAttributeString("count", modelBoneStrings.Count.ToString());
+                            xmlWriter.WriteAttributeString("count", skelDict.Count.ToString());
                             xmlWriter.WriteAttributeString("stride", "1");
                             //<param>
                             xmlWriter.WriteStartElement("param");
@@ -2016,14 +2014,13 @@ namespace FFXIV_TexTools2.IO
                             //<Name_array>
                             xmlWriter.WriteStartElement("float_array");
                             xmlWriter.WriteAttributeString("id", "geom-" + modelName + "_" + i + partString + "-skin1-bind_poses-array");
-                            xmlWriter.WriteAttributeString("count", (16 * modelBoneStrings.Count).ToString());
+                            xmlWriter.WriteAttributeString("count", (16 * meshDataList[i].BoneStrings.Count).ToString());
 
-                            foreach (var boneName in modelBoneStrings)
+                            foreach (var bone in skelDict)
                             {
                                 try
                                 {
-                                    var bone = skelDict[boneName];
-                                    Matrix matrix = new Matrix(bone.InversePoseMatrix);
+                                    Matrix matrix = new Matrix(bone.Value.InversePoseMatrix);
 
                                     xmlWriter.WriteString(matrix.Column1.X + " " + matrix.Column1.Y + " " + matrix.Column1.Z + " " + (matrix.Column1.W * Info.modelMultiplier) + " ");
                                     xmlWriter.WriteString(matrix.Column2.X + " " + matrix.Column2.Y + " " + matrix.Column2.Z + " " + (matrix.Column2.W * Info.modelMultiplier) + " ");
@@ -2032,7 +2029,7 @@ namespace FFXIV_TexTools2.IO
                                 }
                                 catch
                                 {
-                                    Debug.WriteLine("Error at " + boneName);
+                                    Debug.WriteLine("Error at " + bone.Key);
                                 }
 
                             }
@@ -2044,7 +2041,7 @@ namespace FFXIV_TexTools2.IO
                             //<accessor>
                             xmlWriter.WriteStartElement("accessor");
                             xmlWriter.WriteAttributeString("source", "#geom-" + modelName + "_" + i + partString + "-skin1-bind_poses-array");
-                            xmlWriter.WriteAttributeString("count", modelBoneStrings.ToString());
+                            xmlWriter.WriteAttributeString("count", meshDataList[i].BoneStrings.Count.ToString());
                             xmlWriter.WriteAttributeString("stride", "16");
                             //<param>
                             xmlWriter.WriteStartElement("param");
