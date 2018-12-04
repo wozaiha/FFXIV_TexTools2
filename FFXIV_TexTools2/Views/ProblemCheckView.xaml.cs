@@ -633,8 +633,7 @@ namespace FFXIV_TexTools2.Views
 
                     var lineNum = 0;
                     string fixedLine = "";
-                    var tmpLine = 0;
-                    foreach (var line in lines)
+                    foreach(var line in lines)
                     {
                         if (line.Contains("LodType"))
                         {
@@ -648,8 +647,6 @@ namespace FFXIV_TexTools2.Views
 
                                     AddText("\nCertain mods have issues with LoD ON.\n", "Orange");
                                     AddText("\tTurning off LoD...\n", "Black");
-
-                                    tmpLine = lineNum;
 
                                     problem = true;
 
@@ -667,7 +664,7 @@ namespace FFXIV_TexTools2.Views
                                 {
                                     AddText("\t" + line.Substring(0, line.IndexOf("\t")) + " ON\t", "Black");
                                     AddText("\u2716\n", "Red");
-                                    tmpLine = lineNum;
+
                                     problem = true;
                                 }
                                 else
@@ -684,10 +681,10 @@ namespace FFXIV_TexTools2.Views
 
                     if (problem)
                     {
-                        var line = lines[tmpLine];
+                        var line = lines[lineNum];
                         line = line.Substring(0, line.Length - 1) + 0;
 
-                        lines[tmpLine] = line;
+                        lines[lineNum] = line;
 
                         File.WriteAllLines(dir + "\\FFXIV.cfg", lines);
 

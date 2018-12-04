@@ -386,14 +386,7 @@ namespace FFXIV_TexTools2.ViewModel
         {
             string savePath = Properties.Settings.Default.Save_Directory + "/" + selectedCategory + "/" + selectedItem.ItemName + "/3D";
 
-            try
-            {
-                Process.Start(savePath);
-            }
-            catch (Exception ex)
-            {
-                FlexibleMessageBox.Show("Error opening the folder "+ selectedItem.ItemName +"/3D \n"+ ex.Message, "ModelViewModel Error "+ Info.appVersion, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            Process.Start(savePath);
         }
 
         /// <summary>
